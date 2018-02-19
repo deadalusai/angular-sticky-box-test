@@ -4,40 +4,42 @@
     Lorem ipsum dorem, dolor sit amet.
 </p>
 
-<button
-    (click)="show = !show">
+<button (click)="show1 = !show1">
     Show / Hide
 </button>
 
-<sb-sticky-content target="header">
-    <div>
-        Header 1
-        <sb-timestamp></sb-timestamp>
-    </div>
+<button (click)="show2 = !show2">
+    Show / Hide
+</button>
+
+<sb-sticky-content target="header" priority="100">
+    Header 1
+    <sb-timestamp></sb-timestamp>
 </sb-sticky-content>
 
 <!-- show/hide sticky-content directly -->
-<sb-sticky-content
-    *ngIf="show"
-    target="header">
-    <div>
-        Header 2
-        <sb-timestamp></sb-timestamp>
-    </div>
+<sb-sticky-content *ngIf="show1" target="header" priority="1">
+    Header Extra 1
+    <sb-timestamp></sb-timestamp>
 </sb-sticky-content>
 
-<sb-sticky-content target="footer">
-    <div>
-        Footer 1
-        <sb-timestamp></sb-timestamp>
-    </div>
+<sb-sticky-content *ngIf="show2" target="header" priority="200">
+    Header Extra 2
+    <sb-timestamp></sb-timestamp>
 </sb-sticky-content>
 
-<sb-sticky-content target="footer">
+<sb-sticky-content target="footer" priority="100">
+    Footer 1
+    <sb-timestamp></sb-timestamp>
+</sb-sticky-content>
+
+<sb-sticky-content *ngIf="show1" target="footer" priority="1">
     <!-- show/hide within sticky-content -->
-    <div
-        *ngIf="show">
-        Footer 2
-        <sb-timestamp></sb-timestamp>
-    </div>
+    Footer Extra 1
+    <sb-timestamp></sb-timestamp>
+</sb-sticky-content>
+
+<sb-sticky-content *ngIf="show2" target="footer" priority="200">
+    Footer  Extra 2
+    <sb-timestamp></sb-timestamp>
 </sb-sticky-content>

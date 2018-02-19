@@ -1,9 +1,11 @@
 .sb-header {
-
+    /* position: absolute; */
+    /* top: 0; */
 }
 .sb-content {
     
 }
 .sb-footer {
-
+    position: absolute;
+    bottom: 0;
 }

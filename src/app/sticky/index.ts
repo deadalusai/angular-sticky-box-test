@@ -19,10 +19,10 @@ export class StickyService {
         }
     }
     
-    public sendToOutlet (outletName: string, content: Portal<any>) {
+    public sendToOutlet (outletName: string, content: Portal<any>, priority = 0) {
         let outlet = this._outlets.find(o => o.name === outletName);
         if (outlet) {
-            outlet.addContent(content);
+            outlet.addContent(content, priority);
         }
     }
     
@@ -47,6 +47,7 @@ export class StickyService {
 export class StickyContentComponent implements OnInit, OnDestroy {
 
     @Input() public target: string;
+    @Input() public priority: string;
 
     @ViewChild('template') private _portal: CdkPortal;
 
@@ -56,7 +57,7 @@ export class StickyContentComponent implements OnInit, OnDestroy {
 
     public ngOnInit () {
         if (this._portal && this.target) {
-            this._stickyService.sendToOutlet(this.target, this._portal);
+            this._stickyService.sendToOutlet(this.target, this._portal, parseInt(this.priority, 10) || 0);
         }
     }
 
@@ -67,27 +68,33 @@ export class StickyContentComponent implements OnInit, OnDestroy {
 
 export interface StickyContentRecord {
     id: number;
+    priority: number;
+    sort: number;
     content: Portal<any>;
 }
-
-let _UID = 0;
 
 @Component({
     selector: 'sb-sticky-outlet',
     template: `
         <ng-container
             *ngFor="let record of contentRecords; trackBy: trackByContentId">
-            <ng-container
-                [cdkPortalOutlet]="record.content">
-            </ng-container>
+            <div>
+                {{ record.sort }}
+                <ng-container
+                    [cdkPortalOutlet]="record.content">
+                </ng-container>
+            </div>
         </ng-container>
     `
 })
 export class StickyOutletComponent implements OnInit, OnDestroy {
 
     @Input() public name: string;
+    @Input() public stack: 'up'|'down';
     
     public contentRecords: StickyContentRecord[] = [];
+
+    private _uid = 1;
 
     constructor (
         private _stickyService: StickyService
@@ -101,18 +108,28 @@ export class StickyOutletComponent implements OnInit, OnDestroy {
         this._stickyService.unregisterOutlet(this);
     }
     
-    public addContent (content: Portal<any>) {
-        this.contentRecords.push({ id: _UID++, content });
+    public addContent (content: Portal<any>, priority = 1) {
+        if (priority <= 0) {
+            priority = 1;
+        }
+        this.contentRecords.push({ id: this._uid, priority, content, sort: priority });
+        if (this.stack === 'up') {
+            this.contentRecords.sort((a, b) => a.sort - b.sort);
+        } else {
+            this.contentRecords.sort((a, b) => b.sort - a.sort);
+        }
+        this._uid++;
     }
 
     public removeContent (content: Portal<any>) {
         let index = this.contentRecords.findIndex(r => r.content === content);
         if (index !== -1) {
             this.contentRecords.splice(index, 1);
+            this._uid--;
         }
     }
 
-    public trackByContentId (record: StickyContentRecord) {
+    public trackByContentId (index: number, record: StickyContentRecord) {
         return record.id;
     }
 }

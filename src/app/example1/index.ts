@@ -7,7 +7,9 @@ import { CommonModule } from "@angular/common";
     templateUrl: './template.html'
 })
 export class Example1Component {
-    show = false;
+    show1 = false;
+    show2 = false;
+    // timeout = setInterval(() => this.show2 = !this.show2, 5000);
 }
 
 @NgModule({
