@@ -4,10 +4,40 @@
     Lorem ipsum dorem, dolor sit amet.
 </p>
 
-<sb-sticky-content target="header">
+<button
+    (click)="show = !show">
+    Show / Hide
+</button>
 
+<sb-sticky-content target="header">
+    <div>
+        Header 1
+        <sb-timestamp></sb-timestamp>
+    </div>
+</sb-sticky-content>
+
+<!-- show/hide sticky-content directly -->
+<sb-sticky-content
+    *ngIf="show"
+    target="header">
+    <div>
+        Header 2
+        <sb-timestamp></sb-timestamp>
+    </div>
 </sb-sticky-content>
 
 <sb-sticky-content target="footer">
+    <div>
+        Footer 1
+        <sb-timestamp></sb-timestamp>
+    </div>
+</sb-sticky-content>
 
+<sb-sticky-content target="footer">
+    <!-- show/hide within sticky-content -->
+    <div
+        *ngIf="show">
+        Footer 2
+        <sb-timestamp></sb-timestamp>
+    </div>
 </sb-sticky-content>
