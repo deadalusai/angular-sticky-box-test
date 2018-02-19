@@ -1,5 +1,6 @@
 import { Component, NgModule } from "@angular/core";
 import { RouterModule } from "@angular/router";
+import { PortalModule } from "@angular/cdk/portal";
 
 @Component({
     templateUrl: './template.html'
