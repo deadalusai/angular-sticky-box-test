@@ -4,11 +4,13 @@ import { TimestampComponent } from "./timestamp";
 import { CommonModule } from "@angular/common";
 
 @Component({
-    templateUrl: './template.html'
+    templateUrl: './template.html',
+  styleUrls: ['./template.css']
 })
 export class Example1Component {
     show1 = false;
     show2 = false;
+    aside1 = false;
 }
 
 @NgModule({
