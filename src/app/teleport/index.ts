@@ -37,12 +37,12 @@ export class TeleportService {
 }
 
 @Directive({
-    selector: '[sbTeleportContent]',
-    exportAs: 'sbTeleportContent'
+    selector: '[sbTeleport]',
+    exportAs: 'sbTeleport'
 })
 export class TeleportContentDirective extends TemplatePortal implements OnInit, OnDestroy {
 
-    @Input('sbTeleportTarget') public target: string;
+    @Input('sbTeleport') public target: string;
     @Input('sbTeleportPriority') public priority: string;
 
     constructor (
