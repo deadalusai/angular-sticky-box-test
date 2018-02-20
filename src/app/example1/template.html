@@ -13,33 +13,27 @@
 </button>
 
 <!-- headers -->
-<sb-sticky-content target="header" priority="100">
+<ng-template sbStickyContent sbStickyTarget="header" sbStickyPriority="100">
     Header 1
-    <sb-timestamp></sb-timestamp>
-</sb-sticky-content>
+</ng-template>
 
-<sb-sticky-content *ngIf="show1" target="header" priority="1">
-    Header Extra 1
-    <sb-timestamp></sb-timestamp>
-</sb-sticky-content>
+<ng-template *ngIf="show1" sbStickyContent sbStickyTarget="header" sbStickyPriority="1">
+    Header 2
+</ng-template>
 
-<sb-sticky-content *ngIf="show2" target="header" priority="200">
-    Header Extra 2
-    <sb-timestamp></sb-timestamp>
-</sb-sticky-content>
+<ng-template *ngIf="show2" sbStickyContent sbStickyTarget="header" sbStickyPriority="200">
+    Header 3
+</ng-template>
 
 <!-- footers -->
-<sb-sticky-content target="footer" priority="100">
+<ng-template sbStickyContent sbStickyTarget="footer" sbStickyPriority="100">
     Footer 1
-    <sb-timestamp></sb-timestamp>
-</sb-sticky-content>
+</ng-template>
 
-<sb-sticky-content *ngIf="show1" target="footer" priority="1">
-    Footer Extra 1
-    <sb-timestamp></sb-timestamp>
-</sb-sticky-content>
+<ng-template *ngIf="show1" sbStickyContent sbStickyTarget="footer" sbStickyPriority="1">
+    Footer 2
+</ng-template>
 
-<sb-sticky-content *ngIf="show2" target="footer" priority="200">
-    Footer  Extra 2
-    <sb-timestamp></sb-timestamp>
-</sb-sticky-content>
+<ng-template *ngIf="show2" sbStickyContent sbStickyTarget="footer" sbStickyPriority="200">
+    Footer 3
+</ng-template>

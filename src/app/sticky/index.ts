@@ -1,5 +1,5 @@
-import { Portal, PortalModule, CdkPortal } from "@angular/cdk/portal";
-import { Component, NgModule, Input, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { Portal, PortalModule, CdkPortal, TemplatePortal } from "@angular/cdk/portal";
+import { Component, NgModule, Input, OnDestroy, OnInit, ViewChild, TemplateRef, ViewContainerRef, Directive } from "@angular/core";
 import { CommonModule } from "@angular/common";
 
 export class StickyService {
@@ -14,7 +14,7 @@ export class StickyService {
 
     public unregisterOutlet (outlet: StickyOutletComponent) {
         let index = this._outlets.indexOf(outlet);
-        if (index !== -1) {
+        if (index >= 0) {
             this._outlets.splice(index, 1);
         }
     }
@@ -36,35 +36,30 @@ export class StickyService {
     }
 }
 
-@Component({
-    selector: 'sb-sticky-content',
-    template: `
-        <ng-template
-            cdkPortal
-            #template="cdkPortal">
-            <ng-content></ng-content>
-        </ng-template>
-    `
+@Directive({
+    selector: '[sbStickyContent]',
+    exportAs: 'sbStickyContent'
 })
-export class StickyContentComponent implements OnInit, OnDestroy {
+export class StickyContentDirective extends TemplatePortal implements OnInit, OnDestroy {
 
-    @Input() public target: string;
-    @Input() public priority: string;
-
-    @ViewChild('template') private _portal: CdkPortal;
+    @Input('sbStickyTarget') public target: string;
+    @Input('sbStickyPriority') public priority: string;
 
     constructor (
-        private _stickyService: StickyService
-    ) {}
+        private _stickyService: StickyService,
+        templateRef: TemplateRef<any>,
+        viewContainerRef: ViewContainerRef
+    ) {
+        super(templateRef, viewContainerRef);
+    }
 
     public ngOnInit () {
-        if (this._portal && this.target) {
-            this._stickyService.addToOutlet(this.target, this._portal, parseInt(this.priority, 10) || 0);
-        }
+        let priority = parseInt(this.priority, 10) || 0;
+        this._stickyService.addToOutlet(this.target, this, priority);
     }
 
     public ngOnDestroy(): void {
-        this._stickyService.removeFromOutlet(this.target, this._portal);
+        this._stickyService.removeFromOutlet(this.target, this);
     }
 }
 
@@ -80,12 +75,9 @@ export interface StickyContentRecord {
     template: `
         <ng-container
             *ngFor="let record of contentRecords; trackBy: trackByContentId">
-            <div>
-                {{ record.sort }}
-                <ng-container
-                    [cdkPortalOutlet]="record.content">
-                </ng-container>
-            </div>
+            <ng-container
+                [cdkPortalOutlet]="record.content">
+            </ng-container>
         </ng-container>
     `
 })
@@ -115,11 +107,10 @@ export class StickyOutletComponent implements OnInit, OnDestroy {
             priority = 1;
         }
         this.contentRecords.push({ id: this._uid, priority, content, sort: priority });
-        if (this.stack === 'up') {
-            this.contentRecords.sort((a, b) => a.sort - b.sort);
-        } else {
-            this.contentRecords.sort((a, b) => b.sort - a.sort);
-        }
+        let sorter = (this.stack === 'up')
+            ? (a, b) => a.sort - b.sort
+            : (a, b) => b.sort - a.sort;
+        this.contentRecords.sort(sorter);
         this._uid++;
     }
 
@@ -146,11 +137,11 @@ export class StickyOutletComponent implements OnInit, OnDestroy {
     ],
     declarations: [
         StickyOutletComponent,
-        StickyContentComponent
+        StickyContentDirective
     ],
     exports: [
         StickyOutletComponent,
-        StickyContentComponent
+        StickyContentDirective
     ]
 })
 export class StickyModule {
