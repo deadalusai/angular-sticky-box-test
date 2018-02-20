@@ -1,5 +1,5 @@
-import { Portal, PortalModule, CdkPortal, TemplatePortal } from "@angular/cdk/portal";
-import { Component, NgModule, Input, OnDestroy, OnInit, ViewChild, TemplateRef, ViewContainerRef, Directive } from "@angular/core";
+import { PortalModule, Portal, TemplatePortal } from "@angular/cdk/portal";
+import { NgModule, Component, Input, OnDestroy, OnInit, ViewChild, TemplateRef, ViewContainerRef, Directive, SimpleChange, SimpleChanges, OnChanges } from "@angular/core";
 import { CommonModule } from "@angular/common";
 
 export class TeleportService {
@@ -19,20 +19,12 @@ export class TeleportService {
         }
     }
 
-    private _findOutletByName (outletName: string): TeleportOutletComponent {
+    public findOutletByName (outletName: string): TeleportOutletComponent {
         let outlet = this._outlets.find(o => o.name === outletName);
         if (!outlet) {
             throw new Error(`Unable to find outlet '${outletName}'`);
         }
         return outlet;
-    }
-    
-    public addToOutlet (outletName: string, content: Portal<any>, priority = 0) {
-        this._findOutletByName(outletName).addContent(content, priority);
-    }
-    
-    public removeFromOutlet (outletName: string, content: Portal<any>) {
-        this._findOutletByName(outletName).removeContent(content);
     }
 }
 
@@ -40,10 +32,12 @@ export class TeleportService {
     selector: '[sbTeleport]',
     exportAs: 'sbTeleport'
 })
-export class TeleportContentDirective extends TemplatePortal implements OnInit, OnDestroy {
+export class TeleportContentDirective extends TemplatePortal implements OnChanges, OnInit, OnDestroy {
 
     @Input('sbTeleport') public target: string;
     @Input('sbTeleportPriority') public priority: string;
+
+    private _outlet: TeleportOutletComponent;
 
     constructor (
         private _stickyService: TeleportService,
@@ -53,22 +47,50 @@ export class TeleportContentDirective extends TemplatePortal implements OnInit, 
         super(templateRef, viewContainerRef);
     }
 
+    public ngOnChanges (changes: SimpleChanges) {
+        let { target } = changes;
+        if (target && !target.isFirstChange()) {
+            this._updateTeleport();
+        }
+    }
+
     public ngOnInit () {
-        let priority = parseInt(this.priority, 10) || 0;
-        this._stickyService.addToOutlet(this.target, this, priority);
+        this._updateTeleport();
     }
 
     public ngOnDestroy(): void {
-        this._stickyService.removeFromOutlet(this.target, this);
+        if (this._outlet) {
+            this._outlet.removeContent(this);
+            this._outlet = null;
+        }
+    }
+
+    private _updateTeleport () {
+        let newOutlet = this._stickyService.findOutletByName(this.target);
+
+        if (this._outlet === newOutlet) {
+            return;
+        }
+
+        if (this._outlet) {
+            this._outlet.removeContent(this);
+        }
+
+        let priority = parseInt(this.priority, 10) || 0;
+        newOutlet.addContent(this, priority);
+        
+        this._outlet = newOutlet;
     }
 }
 
 export interface TeleportContentRecord {
     id: number;
     priority: number;
-    sort: number;
     content: Portal<any>;
 }
+
+const SORT_ASC  = (a: TeleportContentRecord, b: TeleportContentRecord) => a.priority - b.priority;
+const SORT_DESC = (a: TeleportContentRecord, b: TeleportContentRecord) => b.priority - a.priority;
 
 @Component({
     selector: 'sb-teleport-outlet',
@@ -107,11 +129,8 @@ export class TeleportOutletComponent implements OnInit, OnDestroy {
         if (priority <= 0) {
             priority = 1;
         }
-        this.contentRecords.push({ id: this._uid, priority, content, sort: priority });
-        let sorter = (this.stack === 'up')
-            ? (a, b) => a.sort - b.sort
-            : (a, b) => b.sort - a.sort;
-        this.contentRecords.sort(sorter);
+        this.contentRecords.push({ id: this._uid, priority, content });
+        this.contentRecords.sort(this.stack === 'up' ? SORT_ASC : SORT_DESC);
         this._uid++;
     }
 

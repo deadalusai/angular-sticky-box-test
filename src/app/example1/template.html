@@ -17,11 +17,11 @@
     Header 1
 </ng-template>
 
-<ng-template *ngIf="show1" sbTeleport="header" sbTeleportPriority="1">
+<ng-template *ngIf="show1" sbTeleport="header">
     Header 2
 </ng-template>
 
-<ng-template *ngIf="show2" sbTeleport="header" sbTeleportPriority="200">
+<ng-template *ngIf="show2" sbTeleport="header">
     Header 3
 </ng-template>
 
@@ -30,10 +30,15 @@
     Footer 1
 </ng-template>
 
-<ng-template *ngIf="show1" sbTeleport="footer" sbTeleportPriority="1">
+<ng-template *ngIf="show1" sbTeleport="footer">
     Footer 2
 </ng-template>
 
-<ng-template *ngIf="show2" sbTeleport="footer" sbTeleportPriority="200">
+<ng-template *ngIf="show2" sbTeleport="footer">
     Footer 3
+</ng-template>
+
+<!-- either? -->
+<ng-template [sbTeleport]="show2 ? 'header' : 'footer'">
+    Either?
 </ng-template>
