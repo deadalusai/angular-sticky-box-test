@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
-import { StickyModule } from './sticky';
+import { TeleportModule } from './teleport';
 
 import { HomeModule, HomeComponent } from './home';
 import { Example1Module, Example1Component } from './example1';
@@ -26,7 +26,7 @@ let ROUTES: Routes = [
     Example1Module,
 
     // Page
-    StickyModule
+    TeleportModule
   ],
   providers: [],
   bootstrap: [AppComponent]

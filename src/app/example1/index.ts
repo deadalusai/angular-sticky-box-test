@@ -1,5 +1,5 @@
 import { Component, NgModule } from "@angular/core";
-import { StickyModule } from "../sticky";
+import { TeleportModule } from "../teleport";
 import { TimestampComponent } from "./timestamp";
 import { CommonModule } from "@angular/common";
 
@@ -14,7 +14,7 @@ export class Example1Component {
 @NgModule({
     imports: [
         CommonModule,
-        StickyModule
+        TeleportModule
     ],
     declarations: [
         TimestampComponent,

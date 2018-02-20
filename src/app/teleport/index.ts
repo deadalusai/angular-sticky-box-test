@@ -2,24 +2,24 @@ import { Portal, PortalModule, CdkPortal, TemplatePortal } from "@angular/cdk/po
 import { Component, NgModule, Input, OnDestroy, OnInit, ViewChild, TemplateRef, ViewContainerRef, Directive } from "@angular/core";
 import { CommonModule } from "@angular/common";
 
-export class StickyService {
+export class TeleportService {
 
-    private _outlets: StickyOutletComponent[] = [];
+    private _outlets: TeleportOutletComponent[] = [];
 
-    public registerOutlet (outlet: StickyOutletComponent) {
+    public registerOutlet (outlet: TeleportOutletComponent) {
         if (this._outlets.indexOf(outlet) === -1) {
             this._outlets.push(outlet);
         }
     }
 
-    public unregisterOutlet (outlet: StickyOutletComponent) {
+    public unregisterOutlet (outlet: TeleportOutletComponent) {
         let index = this._outlets.indexOf(outlet);
         if (index >= 0) {
             this._outlets.splice(index, 1);
         }
     }
 
-    private _findOutletByName (outletName: string): StickyOutletComponent {
+    private _findOutletByName (outletName: string): TeleportOutletComponent {
         let outlet = this._outlets.find(o => o.name === outletName);
         if (!outlet) {
             throw new Error(`Unable to find outlet '${outletName}'`);
@@ -37,16 +37,16 @@ export class StickyService {
 }
 
 @Directive({
-    selector: '[sbStickyContent]',
-    exportAs: 'sbStickyContent'
+    selector: '[sbTeleportContent]',
+    exportAs: 'sbTeleportContent'
 })
-export class StickyContentDirective extends TemplatePortal implements OnInit, OnDestroy {
+export class TeleportContentDirective extends TemplatePortal implements OnInit, OnDestroy {
 
-    @Input('sbStickyTarget') public target: string;
-    @Input('sbStickyPriority') public priority: string;
+    @Input('sbTeleportTarget') public target: string;
+    @Input('sbTeleportPriority') public priority: string;
 
     constructor (
-        private _stickyService: StickyService,
+        private _stickyService: TeleportService,
         templateRef: TemplateRef<any>,
         viewContainerRef: ViewContainerRef
     ) {
@@ -63,7 +63,7 @@ export class StickyContentDirective extends TemplatePortal implements OnInit, On
     }
 }
 
-export interface StickyContentRecord {
+export interface TeleportContentRecord {
     id: number;
     priority: number;
     sort: number;
@@ -71,7 +71,7 @@ export interface StickyContentRecord {
 }
 
 @Component({
-    selector: 'sb-sticky-outlet',
+    selector: 'sb-teleport-outlet',
     template: `
         <ng-container
             *ngFor="let record of contentRecords; trackBy: trackByContentId">
@@ -81,17 +81,17 @@ export interface StickyContentRecord {
         </ng-container>
     `
 })
-export class StickyOutletComponent implements OnInit, OnDestroy {
+export class TeleportOutletComponent implements OnInit, OnDestroy {
 
     @Input() public name: string;
     @Input() public stack: 'up'|'down';
     
-    public contentRecords: StickyContentRecord[] = [];
+    public contentRecords: TeleportContentRecord[] = [];
 
     private _uid = 1;
 
     constructor (
-        private _stickyService: StickyService
+        private _stickyService: TeleportService
     ) {}
 
     public ngOnInit () {
@@ -100,6 +100,7 @@ export class StickyOutletComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy(): void {
         this._stickyService.unregisterOutlet(this);
+        this.contentRecords.length = 0;
     }
     
     public addContent (content: Portal<any>, priority = 1) {
@@ -122,7 +123,7 @@ export class StickyOutletComponent implements OnInit, OnDestroy {
         }
     }
 
-    public trackByContentId (index: number, record: StickyContentRecord) {
+    public trackByContentId (index: number, record: TeleportContentRecord) {
         return record.id;
     }
 }
@@ -133,17 +134,17 @@ export class StickyOutletComponent implements OnInit, OnDestroy {
         PortalModule
     ],
     providers: [
-        StickyService
+        TeleportService
     ],
     declarations: [
-        StickyOutletComponent,
-        StickyContentDirective
+        TeleportOutletComponent,
+        TeleportContentDirective
     ],
     exports: [
-        StickyOutletComponent,
-        StickyContentDirective
+        TeleportOutletComponent,
+        TeleportContentDirective
     ]
 })
-export class StickyModule {
+export class TeleportModule {
 
 }
