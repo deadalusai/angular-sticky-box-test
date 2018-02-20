@@ -12,12 +12,12 @@
     Show / Hide
 </button>
 
+<!-- headers -->
 <sb-sticky-content target="header" priority="100">
     Header 1
     <sb-timestamp></sb-timestamp>
 </sb-sticky-content>
 
-<!-- show/hide sticky-content directly -->
 <sb-sticky-content *ngIf="show1" target="header" priority="1">
     Header Extra 1
     <sb-timestamp></sb-timestamp>
@@ -28,13 +28,13 @@
     <sb-timestamp></sb-timestamp>
 </sb-sticky-content>
 
+<!-- footers -->
 <sb-sticky-content target="footer" priority="100">
     Footer 1
     <sb-timestamp></sb-timestamp>
 </sb-sticky-content>
 
 <sb-sticky-content *ngIf="show1" target="footer" priority="1">
-    <!-- show/hide within sticky-content -->
     Footer Extra 1
     <sb-timestamp></sb-timestamp>
 </sb-sticky-content>

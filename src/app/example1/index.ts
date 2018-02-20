@@ -9,7 +9,6 @@ import { CommonModule } from "@angular/common";
 export class Example1Component {
     show1 = false;
     show2 = false;
-    // timeout = setInterval(() => this.show2 = !this.show2, 5000);
 }
 
 @NgModule({

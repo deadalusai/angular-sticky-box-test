@@ -18,19 +18,21 @@ export class StickyService {
             this._outlets.splice(index, 1);
         }
     }
-    
-    public sendToOutlet (outletName: string, content: Portal<any>, priority = 0) {
+
+    private _findOutletByName (outletName: string): StickyOutletComponent {
         let outlet = this._outlets.find(o => o.name === outletName);
-        if (outlet) {
-            outlet.addContent(content, priority);
+        if (!outlet) {
+            throw new Error(`Unable to find outlet '${outletName}'`);
         }
+        return outlet;
     }
     
-    public pullFromOutlet (outletName: string, content: Portal<any>) {
-        let outlet = this._outlets.find(o => o.name === outletName);
-        if (outlet) {
-            outlet.removeContent(content);
-        }
+    public addToOutlet (outletName: string, content: Portal<any>, priority = 0) {
+        this._findOutletByName(outletName).addContent(content, priority);
+    }
+    
+    public removeFromOutlet (outletName: string, content: Portal<any>) {
+        this._findOutletByName(outletName).removeContent(content);
     }
 }
 
@@ -57,12 +59,12 @@ export class StickyContentComponent implements OnInit, OnDestroy {
 
     public ngOnInit () {
         if (this._portal && this.target) {
-            this._stickyService.sendToOutlet(this.target, this._portal, parseInt(this.priority, 10) || 0);
+            this._stickyService.addToOutlet(this.target, this._portal, parseInt(this.priority, 10) || 0);
         }
     }
 
     public ngOnDestroy(): void {
-        this._stickyService.pullFromOutlet(this.target, this._portal);
+        this._stickyService.removeFromOutlet(this.target, this._portal);
     }
 }
 
