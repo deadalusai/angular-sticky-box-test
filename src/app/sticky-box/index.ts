@@ -18,14 +18,14 @@ let _uid = 1;
         }
     `],
     template: `
+        <sb-teleport-outlet
+            [name]="localOutletName">
+        </sb-teleport-outlet>
         <ng-template
             [sbTeleport]="isSticky ? target : localOutletName">
             <ng-content>
             </ng-content>
         </ng-template>
-        <sb-teleport-outlet
-            [name]="localOutletName">
-        </sb-teleport-outlet>
     `
 })
 export class StickyBoxComponent implements OnInit, OnDestroy {

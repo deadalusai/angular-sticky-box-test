@@ -1,5 +1,5 @@
-import { PortalModule, Portal, TemplatePortal } from "@angular/cdk/portal";
-import { NgModule, Component, Input, OnDestroy, OnInit, ViewChild, TemplateRef, ViewContainerRef, Directive, SimpleChange, SimpleChanges, OnChanges } from "@angular/core";
+import { PortalModule, Portal, TemplatePortal, CdkPortalOutlet } from "@angular/cdk/portal";
+import { NgModule, Component, Input, OnDestroy, OnInit, ViewChild, TemplateRef, ViewContainerRef, Directive, SimpleChange, SimpleChanges, OnChanges, QueryList, ViewChildren } from "@angular/core";
 import { CommonModule } from "@angular/common";
 
 export class TeleportService {
@@ -96,7 +96,7 @@ const SORT_DESC = (a: TeleportContentRecord, b: TeleportContentRecord) => b.prio
     selector: 'sb-teleport-outlet',
     template: `
         <ng-container
-            *ngFor="let record of records; trackBy: trackByContentId">
+            *ngFor="let record of records; trackBy: trackByRecordId">
             <ng-container
                 [cdkPortalOutlet]="record.content">
             </ng-container>
@@ -107,6 +107,8 @@ export class TeleportOutletComponent implements OnInit, OnDestroy {
 
     @Input() public name: string;
     @Input() public stack: 'up' | 'down';
+    
+    @ViewChildren(CdkPortalOutlet) public portalOutlets: QueryList<CdkPortalOutlet>
     
     public records: TeleportContentRecord[] = [];
 
@@ -137,12 +139,21 @@ export class TeleportOutletComponent implements OnInit, OnDestroy {
     public removeContent (content: Portal<any>) {
         let index = this.records.findIndex(r => r.content === content);
         if (index !== -1) {
+            // HACK: Manually detach the content immediately.
+            // This supports moving content from one teleport outlet to another, which may lead to 
+            // Angular attempting to remove the content from the DOM here after it has already been
+            // moved to the second outlet (raises a DOM "node is not a child of parent" error).
+            // NOTE: The order of elements in `cdkPortalOutlets` matches the order of elements in `records`.
+            let portalOutlet = this.portalOutlets.find((outlet, outletIndex) => outletIndex === index);
+            if (portalOutlet) {
+                portalOutlet.detach();
+            }
             this.records.splice(index, 1);
             this._uid--;
         }
     }
 
-    public trackByContentId (index: number, record: TeleportContentRecord) {
+    public trackByRecordId (index: number, record: TeleportContentRecord) {
         return record.id;
     }
 }
