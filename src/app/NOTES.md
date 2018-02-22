@@ -94,3 +94,30 @@
 
 **Cons**
 - Need to manually set body padding
+
+
+# Recommendations
+
+- Header
+  + `position: fixed` with fixed height
+  + No sticky header
+  + Fixed content (no Portal)
+
+- Content
+  + `position: sticky` with header height offset (if required)
+  + Only stick content if you're happy that it won't stick in IE
+  + Fixed content (no Portal)
+
+- Footer
+  + `position: sticky`
+  + Only stick content if you're happy that it won't stick in IE
+  + Portal content in
+
+- Toast messages
+  + `position: fixed` with high z-index
+  + No need to add body padding
+  + Portal content in
+  + Can overlap with existing footer?
+
+- Oddball solutions:
+  + Seperate header scrolling from body scrolling?
