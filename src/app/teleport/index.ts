@@ -96,7 +96,7 @@ const SORT_DESC = (a: TeleportContentRecord, b: TeleportContentRecord) => b.prio
     selector: 'sb-teleport-outlet',
     template: `
         <ng-container
-            *ngFor="let record of contentRecords; trackBy: trackByContentId">
+            *ngFor="let record of records; trackBy: trackByContentId">
             <ng-container
                 [cdkPortalOutlet]="record.content">
             </ng-container>
@@ -106,9 +106,9 @@ const SORT_DESC = (a: TeleportContentRecord, b: TeleportContentRecord) => b.prio
 export class TeleportOutletComponent implements OnInit, OnDestroy {
 
     @Input() public name: string;
-    @Input() public stack: 'up'|'down';
+    @Input() public stack: 'up' | 'down';
     
-    public contentRecords: TeleportContentRecord[] = [];
+    public records: TeleportContentRecord[] = [];
 
     private _uid = 1;
 
@@ -122,22 +122,22 @@ export class TeleportOutletComponent implements OnInit, OnDestroy {
 
     public ngOnDestroy(): void {
         this._stickyService.unregisterOutlet(this);
-        this.contentRecords.length = 0;
+        this.records.length = 0;
     }
     
     public addContent (content: Portal<any>, priority = 1) {
         if (priority <= 0) {
             priority = 1;
         }
-        this.contentRecords.push({ id: this._uid, priority, content });
-        this.contentRecords.sort(this.stack === 'up' ? SORT_ASC : SORT_DESC);
+        this.records.push({ id: this._uid, priority, content });
+        this.records.sort(this.stack === 'up' ? SORT_ASC : SORT_DESC);
         this._uid++;
     }
 
     public removeContent (content: Portal<any>) {
-        let index = this.contentRecords.findIndex(r => r.content === content);
+        let index = this.records.findIndex(r => r.content === content);
         if (index !== -1) {
-            this.contentRecords.splice(index, 1);
+            this.records.splice(index, 1);
             this._uid--;
         }
     }

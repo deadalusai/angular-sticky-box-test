@@ -7,11 +7,13 @@ import { TeleportModule } from './teleport';
 
 import { HomeModule, HomeComponent } from './home';
 import { Example1Module, Example1Component } from './example1';
+import { Example2Module, Example2Component } from './example2';
 
 let ROUTES: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'example1', component: Example1Component }
-]
+  { path: 'example1', component: Example1Component },
+  { path: 'example2', component: Example2Component }
+];
 
 @NgModule({
   declarations: [
@@ -24,6 +26,7 @@ let ROUTES: Routes = [
     RouterModule.forRoot(ROUTES),
     HomeModule,
     Example1Module,
+    Example2Module,
 
     // Page
     TeleportModule
