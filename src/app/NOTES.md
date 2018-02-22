@@ -102,22 +102,26 @@
   + `position: fixed` with fixed height
   + No sticky header
   + Fixed content (no Portal)
+  + For dynamic content (e.g. a page-width region dropdown), use a `position: absolute` container at the bottom of the header.
+
+    This allows the dynamic content to "drop over" the content in
+    the rest of the page, and importantly does not require 
+    re-calculation of the height of the header.
 
 - Content
-  + `position: sticky` with header height offset (if required)
-  + Only stick content if you're happy that it won't stick in IE
+  + `position: sticky` (if you're happy that it won't stick in IE)
+  + `top: {header height}` (if using a sticky or fixed header)
   + Fixed content (no Portal)
 
 - Footer
-  + `position: sticky`
-  + Only stick content if you're happy that it won't stick in IE
+  + `position: sticky` (if you're happy that it won't stick in IE)
   + Portal content in
 
 - Toast messages
   + `position: fixed` with high z-index
-  + No need to add body padding
+  + No need to add body padding!
   + Portal content in
-  + Can overlap with existing footer?
+  + Can overlap with existing footer
 
 - Oddball solutions:
-  + Seperate header scrolling from body scrolling?
+  + Seperate header scrolling from body scrolling
