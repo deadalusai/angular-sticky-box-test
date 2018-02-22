@@ -66,6 +66,10 @@ export class StickyBoxComponent implements OnInit, OnDestroy {
         let viewportHeight = document.documentElement.clientHeight;
         let contentEl = this._elementRef.nativeElement as HTMLElement;
         let contentRect = contentEl.getBoundingClientRect();
+
+        console.log(`top:`, contentRect.top);
+        // console.log(`viewport height:`, viewportHeight);
+        // console.log(`content rect:`, contentRect);
         
         if (contentRect.top > 0) {
             contentEl.style.height = null;

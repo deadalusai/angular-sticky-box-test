@@ -22,6 +22,15 @@
   padding: 5px 30px;
 }
 
+.sb-header-sticky {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: goldenrod;
+  padding: 5px 30px;
+}
+
 .sb-footer {
   position: sticky;
   bottom: 0;
