@@ -4,16 +4,22 @@
     <sb-teleport-outlet name="header" stack="down">
     </sb-teleport-outlet>
 
-  <div class="sb-aside">
+    <div class="sb-header-sticky">
+        <!-- STICKY STUFF GOES HERE -->
+        <sb-teleport-outlet name="header-sticky" stack="down">
+        </sb-teleport-outlet>
 
-    <!--  ASIDE STUFF GOES HERE -->
-    <sb-teleport-outlet name="aside" stack="down">
-    </sb-teleport-outlet>
+        <div class="sb-aside">
 
-  </div>
+            <!--  ASIDE STUFF GOES HERE -->
+            <sb-teleport-outlet name="aside" stack="down">
+            </sb-teleport-outlet>
+
+        </div>
+            
+    </div>
 
 </div>
-
 
 <div class="sb-content">
 
