@@ -1,13 +1,13 @@
 import { Component, NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { TimestampComponent } from "./timestamp";
 import { TeleportModule } from "../teleport";
+import { StickyBoxModule } from "../sticky-box";
 
 @Component({
     templateUrl: './template.html',
     styleUrls: ['./template.css']
 })
-export class Example1Component {
+export class Example2Component {
     show1 = false;
     show2 = false;
     aside1 = false;
@@ -16,14 +16,14 @@ export class Example1Component {
 @NgModule({
     imports: [
         CommonModule,
-        TeleportModule
+        TeleportModule,
+        StickyBoxModule
     ],
     declarations: [
-        TimestampComponent,
-        Example1Component
+        Example2Component
     ],
     exports: [
-        Example1Component
+        Example2Component
     ]
 })
-export class Example1Module { }
+export class Example2Module { }

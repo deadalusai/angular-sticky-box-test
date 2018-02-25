@@ -7,10 +7,7 @@ import { TeleportModule } from "../teleport";
     templateUrl: './template.html',
     styleUrls: ['./template.css']
 })
-export class Example1Component {
-    show1 = false;
-    show2 = false;
-    aside1 = false;
+export class Example3Component {
 }
 
 @NgModule({
@@ -20,10 +17,10 @@ export class Example1Component {
     ],
     declarations: [
         TimestampComponent,
-        Example1Component
+        Example3Component
     ],
     exports: [
-        Example1Component
+        Example3Component
     ]
 })
-export class Example1Module { }
+export class Example3Module { }
