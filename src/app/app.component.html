@@ -1,37 +1,51 @@
-<div class="sb-header">
+<div class="teleport-header">
+
+  <div class="sb-header" id="header">
 
     <!--  HEADER STUFF GOES HERE -->
     <sb-teleport-outlet name="header" stack="down">
     </sb-teleport-outlet>
 
-    <div class="sb-header-sticky">
-        <!-- STICKY STUFF GOES HERE -->
-        <sb-teleport-outlet name="header-sticky" stack="down">
+  </div>
+
+  <div class="sb-aside container" id="aside">
+
+    <div class="row">
+
+      <div class="col-3 col-offset-9">
+
+        <!--  ASIDE STUFF GOES HERE -->
+        <sb-teleport-outlet name="aside" stack="down">
         </sb-teleport-outlet>
 
-        <div class="sb-aside">
+      </div> <!-- /.col-3.col-offset-9 -->
 
-            <!--  ASIDE STUFF GOES HERE -->
-            <sb-teleport-outlet name="aside" stack="down">
-            </sb-teleport-outlet>
+    </div> <!-- /.row -->
 
-        </div>
-            
-    </div>
+  </div> <!-- /.sb-aside.container -->
 
-</div>
+</div> <!-- /.sb-header -->
 
-<div class="sb-content">
 
-    <!--  CONTENT STUFF GOES HERE -->
-    <router-outlet></router-outlet>
 
-</div>
+<div class="teleport-content">
 
-<div class="sb-footer">
+  <!--  CONTENT STUFF GOES HERE -->
+  <router-outlet></router-outlet>
+
+</div> <!-- /.sb-content -->
+
+
+
+<div class="teleport-footer" id="footer">
+
+  <div class="sb-footer">
 
     <!--  FOOTER STUFF GOES HERE -->
     <sb-teleport-outlet name="footer" stack="up">
     </sb-teleport-outlet>
 
-</div>
+
+  </div> <!-- /.sb-footer -->
+
+</div> <!-- /.teleport-footer -->
